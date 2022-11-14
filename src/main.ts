@@ -19,7 +19,9 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule)
 
     swaggerDocumentation(app)
-    await app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+    await app.listen(PORT, () => {
+        console.log(`Server started on port ${PORT}`)
+        console.log('WELCOME TO APP ENVIROMENT, DONT FORGET TO ALWAYS WRAP YOUR process.env file in Template literals (Template strings)')
+    })
 }
 bootstrap()
-

@@ -14,6 +14,10 @@ export class UsersService {
         private roleService: RolesService
     ) {}
 
+    flatAnswer(answer: UsersModels[]) {
+        return answer.map(user => Object.assign(JSON.parse(JSON.stringify(user)), {roles: user?.roles?.[0]?.value}))
+    }
+
     async getAllUsers() {
         const users = await this.userTable.findAll({
             // include: {all: true}
@@ -29,12 +33,12 @@ export class UsersService {
                 }
             ]
         })
-        // const flatedUsers = users.map(user => {return {
-        //     ...JSON.parse(JSON.stringify(user)),
-        //     roles: user.roles?.[0]?.value
-        // }})
-        const flatedUsers = users.map(user => Object.assign(JSON.parse(JSON.stringify(user)), {roles: user.roles?.[0]?.value}))
-        return flatedUsers
+        return this.flatAnswer(users)
+    }
+
+    async getUserByEmail(email: string) {
+        const user = await this.userTable.findOne({where: {email}, include: {all:true}})
+        return user
     }
 
     async createUser(dto: CreateUserDto) {
